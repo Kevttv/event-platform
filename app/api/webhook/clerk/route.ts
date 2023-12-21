@@ -7,7 +7,6 @@ import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
 
-    // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
 
     if (!WEBHOOK_SECRET) {
@@ -19,6 +18,8 @@ export async function POST(req: Request) {
     const svix_id = headerPayload.get("svix-id");
     const svix_timestamp = headerPayload.get("svix-timestamp");
     const svix_signature = headerPayload.get("svix-signature");
+
+
 
     // If there are no headers, error out
     if (!svix_id || !svix_timestamp || !svix_signature) {
@@ -65,8 +66,10 @@ export async function POST(req: Request) {
             lastName: last_name,
             photo: image_url,
         }
+        
 
         const newUser = await createUser(user);
+        console.log(newUser)
 
         if (newUser) {
             await clerkClient.users.updateUserMetadata(id, {
